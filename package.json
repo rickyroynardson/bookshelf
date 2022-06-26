@@ -1,0 +1,24 @@
+{
+  "name": "bookshelf",
+  "version": "1.0.0",
+  "description": "Sebuah website sederhana untuk mengelola daftar buku yang terbagi menjadi 2 rak (selesai dibaca dan belum selesai dibaca) yang dibuat dengan harapan agar tuntas di submission \"Belajar Membuat Front-End Web untuk Pemula\" dari Dicoding.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tailwindcss": "npx tailwindcss -i ./assets/css/input.css -o ./assets/css/style.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rickyroynardson/bookshelf.git"
+  },
+  "keywords": [],
+  "author": "Roooy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rickyroynardson/bookshelf/issues"
+  },
+  "homepage": "https://github.com/rickyroynardson/bookshelf#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.1.4"
+  }
+}
