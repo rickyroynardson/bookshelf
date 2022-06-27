@@ -5,9 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bookshelf</title>
+    <link
+      rel="shortcut icon"
+      href="/assets/img/favicon.png"
+      type="images/x-icon
+    "
+    />
     <link rel="stylesheet" href="/assets/css/style.css" />
   </head>
   <body>
-    <h1 class="text-3xl">Dicoding front-end submission</h1>
+    <header class="w-full max-w-4xl mx-auto p-3">
+      <img src="/assets/img/bookshelf.webp" alt="Bookshelf" class="h-10" />
+    </header>
+    <main class="w-full max-w-4xl mx-auto">
+      <div class="bg-red-500">
+        <button id="add-button">Tambah Buku</button>
+        <form class="hidden" id="form">
+          <div>
+            <label for="title">Judul</label>
+            <input type="text" id="title" />
+          </div>
+          <div>
+            <label for="author">Penulis</label>
+            <input type="text" id="author" />
+          </div>
+          <div>
+            <label for="year">Tahun</label>
+            <input type="number" id="year" />
+          </div>
+          <div>
+            <label for="isComplete">Selesai di baca</label>
+            <input type="checkbox" id="isComplete" />
+          </div>
+          <button type="submit">Simpan</button>
+        </form>
+      </div>
+      <div class="bg-blue-200">Search form</div>
+      <div class="flex flex-col gap-2 p-2">
+        <div class="bg-orange-200">
+          <h2>Belum selesai dibaca</h2>
+          <div id="unreaded"></div>
+        </div>
+        <div class="bg-sky-200">
+          <h2>Selesai dibaca</h2>
+          <div id="readed"></div>
+        </div>
+      </div>
+    </main>
+    <footer class="w-full font-nunito font-semibold text-sm text-center p-3">
+      Copyright &copy; 2022. Created by
+      <a href="https://github.com/rickyroynardson">Ricky Roy Nardson</a>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
   </body>
 </html>
