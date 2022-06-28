@@ -3,3 +3,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* scrollbar */
+* {
+    scrollbar-width: none;
+    scrollbar-color: #878787 #e6e6e6;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #e6e6e6;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #878787;
+    border-radius: 8px;
+    border: 0px solid #ffffff;
+}

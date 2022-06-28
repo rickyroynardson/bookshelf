@@ -10,7 +10,7 @@
 ]
 */
 
-const books = [];
+let books = [];
 const STORAGE_KEY = "BOOKSHELF";
 const RENDER_EVENT = "BOOKSHELF_RENDER";
 
@@ -31,38 +31,61 @@ const loadBookFromStorage = () => {
 
 const makeCard = (id, title, author, year, isComplete) => {
   const card = document.createElement("div");
-  card.classList.add("border-4", "border-black");
+  card.classList.add("w-full", "bg-white", "shadow", "rounded-lg", "px-2", "py-2", "border-l-2", "border-blue-500");
   card.innerHTML = `
-        <h1>${title}</h1>
-        <p>Penulis : ${author}</p>
-        <p>Tahun terbit : ${year}</p>
+        <h1 class="text-lg text-black font-semibold">${title}</h1>
+        <p class="text-sm text-gray-600">Penulis : ${author}</p>
+        <p class="text-sm text-gray-600">Tahun terbit : ${year}</p>
     `;
 
   const editButton = document.createElement("button");
   editButton.innerHTML = `Edit`;
+  editButton.classList.add("px-2", "py-0.5", "rounded-lg", "bg-yellow-500", "text-white", "text-sm", "shadow", "transition", "duration-300", "hover:bg-yellow-600", "focus:outline-none", "focus:ring-2", "focus:ring-yellow-500", "focus:border-yellow-400");
   editButton.addEventListener("click", () => {
     editBook(id);
   });
 
   const deleteButton = document.createElement("button");
   deleteButton.innerHTML = `Hapus`;
+  deleteButton.classList.add("mx-1", "px-2", "py-0.5", "rounded-lg", "bg-red-500", "text-white", "text-sm", "shadow", "transition", "duration-300", "hover:bg-red-600", "focus:outline-none", "focus:ring-2", "focus:ring-red-500", "focus:border-red-400");
   deleteButton.addEventListener("click", () => {
-    deleteBook(id);
+    if (confirm(`Apakah anda yakin ingin menghapus buku ${title}?`) == true) {
+      deleteBook(id);
+    }
   });
 
   const checkButton = document.createElement("button");
   checkButton.innerHTML = isComplete ? `Belum Selesai Dibaca` : `Selesai Dibaca`;
+  checkButton.classList.add("px-2", "py-0.5", "rounded-lg", "bg-teal-400", "text-white", "text-sm", "shadow", "transition", "duration-300", "hover:bg-teal-500", "focus:outline-none", "focus:ring-2", "focus:ring-teal-400", "focus:border-teal-300")
   checkButton.addEventListener("click", () => {
-    if (isComplete) {
-      setBookUnreaded(id);
-    } else {
-      setBookReaded(id);
+    if (confirm(`Apakah anda yakin ingin memindahkan buku ${title} ke rak ${isComplete ? `Belum Selesai Dibaca` : `Selesai Dibaca`}?`) == true) {
+      if (isComplete) {
+        setBookUnreaded(id);
+      } else {
+        setBookReaded(id);
+      }
     }
   });
 
   card.append(editButton, deleteButton, checkButton);
   return card;
 };
+
+const showAlert = (msg) => {
+  const alert = document.querySelector("#alert");
+  alert.classList.remove("hidden");
+  alert.innerText = msg;
+
+  setTimeout(() => {
+    removeAlert();
+  }, 3000)
+}
+
+const removeAlert = () => {
+  const alert = document.querySelector("#alert");
+  alert.classList.add("hidden");
+  alert.innerText = "";
+}
 
 const findBook = (id) => {
   for (const book of books) {
@@ -91,8 +114,9 @@ const saveBook = () => {
 const refreshForm = () => {
   form.removeEventListener("submit", editBookAction);
   form.addEventListener("submit", addBookAction);
+  form.classList.toggle("hidden");
   clearInput();
-  document.querySelector("#add-button").innerText = "Tambah Buku";
+  document.querySelector("#add-button > span").innerText = "Tambah Buku";
   const cancelButton = document.querySelector("#cancel-button");
   if (cancelButton !== null) {
     form.removeChild(cancelButton);
@@ -136,6 +160,8 @@ const addBook = () => {
 
   saveBook();
   clearInput();
+  refreshForm();
+  showAlert(`Berhasil menambahkan buku dengan judul "${title}"`);
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -157,6 +183,7 @@ const updateBook = () => {
   saveBook();
   clearInput();
   refreshForm();
+  showAlert(`Berhasil mengubah data buku "${title}"`);
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -167,6 +194,7 @@ const setBookReaded = (id) => {
   book.isComplete = true;
 
   saveBook();
+  showAlert(`Berhasil memindahkan buku "${book.title}" ke rak selesai dibaca`);
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -177,6 +205,7 @@ const setBookUnreaded = (id) => {
   book.isComplete = false;
 
   saveBook();
+  showAlert(`Berhasil memindahkan buku "${book.title}" ke rak belum selesai dibaca`);
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
@@ -193,6 +222,7 @@ const editBook = (id) => {
   cancelButton.innerHTML = `Batal`;
   cancelButton.type = "button";
   cancelButton.id = "cancel-button";
+  cancelButton.classList.add("px-2", "py-1", "text-sm", "rounded-lg", "bg-gray-500", "text-white", "shadow", "transition", "duration-300", "hover:bg-gray-600")
   cancelButton.addEventListener("click", () => {
     refreshForm();
   });
@@ -212,7 +242,7 @@ const editBook = (id) => {
     form.append(inputId);
   }
 
-  document.querySelector("#add-button").innerText = "Edit Buku";
+  document.querySelector("#add-button > span").innerText = "Edit Buku";
 
   document.querySelector("#title").value = book.title;
   document.querySelector("#author").value = book.author;
@@ -221,14 +251,35 @@ const editBook = (id) => {
 };
 
 const deleteBook = (id) => {
+  const bookDetail = findBook(id);
   const book = findBookIndex(id);
   if (book === -1) return;
 
   books.splice(book, 1);
 
   saveBook();
+  showAlert(`Berhasil menghapus buku "${bookDetail.title}" dari rak`)
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
+
+const searchBooks = () => {
+  const state = books;
+
+  if (search.value !== "") {
+    const filter = books.filter((book) => { return (book.title.toLowerCase().search(`${search.value.toLowerCase()}`) !== -1); });
+    books = filter;
+  }
+
+  const searchAlert = document.querySelector("#search-alert");
+  if (!books.length > 0) {
+    searchAlert.innerText = `Judul "${search.value}" tidak ditemukan`;
+  } else {
+    searchAlert.innerText = "";
+  }
+
+  document.dispatchEvent(new Event(RENDER_EVENT));
+  books = state;
+}
 
 const addButton = document.querySelector("#add-button");
 addButton.addEventListener("click", () => {
@@ -243,6 +294,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.querySelector("#form");
   form.addEventListener("submit", addBookAction);
+
+  const search = document.querySelector("#search");
+  search.addEventListener("input", (e) => {
+    e.preventDefault();
+    searchBooks();
+  })
+
+  const copyright = document.querySelector("#copyright");
+  copyright.innerHTML = new Date().getFullYear();
 });
 
 document.addEventListener(RENDER_EVENT, () => {

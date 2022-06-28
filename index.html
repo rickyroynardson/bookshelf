@@ -13,48 +13,165 @@
     />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
-  <body>
-    <header class="w-full max-w-4xl mx-auto p-3">
+  <body class="bg-slate-100">
+    <header class="w-full max-w-4xl mx-auto px-3 py-5">
       <img src="assets/img/bookshelf.webp" alt="Bookshelf" class="h-10" />
     </header>
-    <main class="w-full max-w-4xl mx-auto">
-      <div class="bg-red-500">
-        <button id="add-button">Tambah Buku</button>
-        <form class="hidden" id="form">
-          <div>
+    <main class="w-full max-w-4xl mx-auto px-3 md:px-5">
+      <div class="flex flex-col gap-2 font-nunito">
+        <button
+          class="w-full flex items-center justify-between px-4 py-2 rounded-xl bg-blue-600 text-white shadow-lg font-semibold transition duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-300"
+          id="add-button"
+        >
+          <span>Tambah Buku</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <form
+          class="hidden bg-white border-slate-300 border-l-2 px-3 py-2 shadow-lg rounded-xl"
+          id="form"
+        >
+          <div class="mb-2">
             <label for="title">Judul</label>
-            <input type="text" id="title" required />
+            <input
+              type="text"
+              id="title"
+              class="w-full border rounded-md px-2 py-1 shadow text-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-400"
+              required
+            />
           </div>
-          <div>
+          <div class="mb-2">
             <label for="author">Penulis</label>
-            <input type="text" id="author" required />
+            <input
+              type="text"
+              id="author"
+              class="w-full border rounded-md px-2 py-1 shadow text-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-400"
+              required
+            />
           </div>
-          <div>
+          <div class="mb-2">
             <label for="year">Tahun</label>
-            <input type="number" id="year" required />
+            <input
+              type="number"
+              id="year"
+              class="w-full border rounded-md px-2 py-1 shadow text-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-400"
+              required
+            />
           </div>
-          <div>
+          <div class="mb-2 flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isComplete"
+              class="h-4 w-4 focus:outline-blue-500"
+            />
             <label for="isComplete">Selesai di baca</label>
-            <input type="checkbox" id="isComplete" />
           </div>
-          <button type="submit">Simpan</button>
+          <button
+            type="submit"
+            class="px-2 py-1 text-sm rounded-lg bg-blue-500 text-white shadow transition duration-300 hover:bg-blue-600"
+          >
+            Simpan
+          </button>
         </form>
       </div>
-      <div class="bg-blue-200">Search form</div>
-      <div class="flex flex-col gap-2 p-2">
-        <div class="bg-orange-200">
-          <h2>Belum selesai dibaca</h2>
-          <div id="unreaded"></div>
+      <div class="py-2">
+        <div class="flex items-center">
+          <div class="absolute px-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-gray-500"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <input
+            type="search"
+            placeholder="Cari berdasarkan judul"
+            class="w-full border rounded-md pl-9 pr-3 py-2 font-nunito text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-300"
+            id="search"
+          />
         </div>
-        <div class="bg-sky-200">
-          <h2>Selesai dibaca</h2>
-          <div id="readed"></div>
+        <p
+          id="search-alert"
+          class="font-nunito text-sm text-slate-700 mt-1"
+        ></p>
+      </div>
+      <div
+        id="alert"
+        class="hidden px-2 py-1 mb-3 bg-green-200 border-green-500 border-l-4 text-green-500 font-semibold font-nunito"
+      ></div>
+      <div class="flex flex-col gap-2 font-nunito">
+        <div
+          class="bg-white shadow-lg rounded-lg px-2 py-1 max-h-80 overflow-y-auto"
+        >
+          <h2
+            class="flex items-center gap-1 text-lg text-slate-800 font-semibold border-red-400 border-b lg:text-xl"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span>Belum selesai dibaca</span>
+          </h2>
+          <div id="unreaded" class="py-2 grid gap-2 md:grid-cols-2"></div>
+        </div>
+        <div
+          class="bg-white shadow-lg rounded-lg px-2 py-1 max-h-80 overflow-y-auto"
+        >
+          <h2
+            class="flex items-center gap-1 text-lg text-slate-800 font-semibold border-green-400 border-b lg:text-xl"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span>Selesai dibaca</span>
+          </h2>
+          <div id="readed" class="py-2 grid gap-2 md:grid-cols-2"></div>
         </div>
       </div>
     </main>
-    <footer class="w-full font-nunito font-semibold text-sm text-center p-3">
-      Copyright &copy; 2022. Created by
-      <a href="https://github.com/rickyroynardson">Ricky Roy Nardson</a>
+    <footer
+      class="w-full font-nunito font-semibold text-xs text-center p-3 sm:text-sm"
+    >
+      Copyright &copy; <span id="copyright"></span>. Created by
+      <a
+        href="https://github.com/rickyroynardson"
+        class="transition duration-300 focus:outline-none focus:underline hover:underline"
+        >Ricky Roy Nardson</a
+      >
     </footer>
 
     <script src="assets/js/script.js"></script>
